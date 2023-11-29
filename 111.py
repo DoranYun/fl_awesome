@@ -29,7 +29,7 @@ trans_mnist = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0
 dataset_train = datasets.MNIST('../data/mnist/', train=True, download=True, transform=trans_mnist)
 dataset_test = datasets.MNIST('../data/mnist/', train=False, download=True, transform=trans_mnist)
 
-dict_users = mnist_iid(dataset_train, args.num_users)
+dict_users = mnist_noniid(dataset_train, args.num_users)
 
 img_size = dataset_train[0][0].shape
 print('img_size',img_size)
@@ -99,6 +99,6 @@ for iter in range(args.epochs):
 
 
 df = pd.DataFrame(brier_scores)
-df.to_csv('brier_scores.csv'.format(brier_scores), index = False)
+df.to_csv('brier_scores_FedAvg_noniid.csv'.format(brier_scores), index = False)
 # 将DataFrame保存为CSV文件
 # df.to_csv('test_accuacy_B_{}_E_{}_noniid.csv'.format(args.local_bs, args.local_ep), index=False)
