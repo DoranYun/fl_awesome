@@ -61,11 +61,15 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
-brier_scores = pd.read_csv('brier_scores.csv').to_numpy().tolist()
-brier_scores_np = np.array(brier_scores)
+brier_scores_iid = pd.read_csv('brier_scores_iid.csv').to_numpy().tolist()
+brier_scores_np_iid = np.array(brier_scores_iid)
+
+brier_scores_noniid = pd.read_csv('brier_scores_noniid.csv').to_numpy().tolist()
+brier_scores_np_noniid = np.array(brier_scores_noniid)
 
 fig, ax = plt.subplots()
-plt.plot(range(len(brier_scores)), brier_scores_np, color='slateblue', label = 'IID')
+plt.plot(range(len(brier_scores_iid)), brier_scores_np_iid, color='slateblue', label = 'IID')
+plt.plot(range(len(brier_scores_noniid)), brier_scores_np_noniid, color='orange', label = 'NON-IID')
 ax.set_xlabel('Communication Rounds', fontsize=16)
 ax.set_ylabel('Brier Score', fontsize=16)
 plt.legend()
