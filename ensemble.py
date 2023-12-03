@@ -3,18 +3,12 @@ import torch
 import torchvision
 from torchvision import datasets, transforms
 import torch.utils.data.dataloader as dataloader
-from torch.utils.data import Subset
-import torch.nn as nn
-import torch.optim as optim
-from torch.nn.parameter import Parameter
 
 from args import args_parser
-from utils.sampling import mnist_iid, mnist_noniid
+from utils.sampling import mnist_iid
 from model.update import LocalUpdate
 from model.Net import CNNMnist
-from model.Fed import FedAvg
-from model.test import test_img
-import copy
+from model.test import test_for_deep_ensemble
 
 import matplotlib
 
@@ -45,13 +39,19 @@ brier_scores = []
 
 m = max(int(args.frac * args.num_users), 1)
 
-models = [CNNMnist(args) for _ in range(10)]
+models = []
 idxs_users = np.random.choice(range(args.num_users), m, replace=False)
 for idx in idxs_users:
     local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[idx])
     model = local.train(net=CNNMnist(args=args).to(args.device))
+    models.append(model)
 
-# testing
+#testing
+def ensemble_predict(models, x):
+    # 确保模型处于评估模式
+    acc_train, loss_train1, brier_score_train = test_for_deep_ensemble(models, dataset_train, args)
+    acc_test, loss_test, brier_score_test = test_for_deep_ensemble(models, dataset_test, args)
+
 # acc_train, loss_train1, brier_score_train = test_img(net_glob, dataset_train, args)
 # acc_test, loss_test, brier_score_test = test_img(net_glob, dataset_test, args)
 # print("Training accuracy: {:.2f}".format(acc_train))

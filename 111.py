@@ -75,7 +75,7 @@ for iter in range(args.epochs):
     loss_avg = sum(loss_locals) / len(loss_locals)
     print('Round {:3d}, Average loss {:.3f}'.format(iter, loss_avg))
     loss_train.append(loss_avg)
-    
+
     # testing
     net_glob.eval()
     acc_train, loss_train1, brier_score_train = test_img(net_glob, dataset_train, args)
