@@ -43,7 +43,7 @@ models = []
 idxs_users = np.random.choice(range(args.num_users), m, replace=False)
 for idx in idxs_users:
     local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[idx])
-    model = local.train(net=CNNMnist(args=args).to(args.device))
+    _, __, model = local.train(net=CNNMnist(args=args).to(args.device))
     models.append(model)
 
 #testing
