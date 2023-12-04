@@ -1,0 +1,85 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+acc_1 = pd.read_csv('test_accuacy_B_10_E_1.csv').to_numpy().tolist()
+acc_1.insert(0, [0])
+acc_2 = pd.read_csv('test_accuacy_B_10_E_5.csv').to_numpy().tolist()
+acc_2.insert(0, [0])
+acc_3 = pd.read_csv('test_accuacy_B_10_E_20.csv').to_numpy().tolist()
+acc_3.insert(0, [0])
+acc_4 = pd.read_csv('test_accuacy_B_50_E_1.csv').to_numpy().tolist()
+acc_4.insert(0, [0])
+acc_5 = pd.read_csv('test_accuacy_B_50_E_5.csv').to_numpy().tolist()
+acc_5.insert(0, [0])
+acc_6 = pd.read_csv('test_accuacy_B_50_E_20.csv').to_numpy().tolist()
+acc_6.insert(0, [0])
+
+
+epoch = np.arange(0, 51)
+
+fig, ax = plt.subplots()
+ax.plot(epoch, acc_1, linestyle='-', color='orange', label = 'B=10 E=1')
+ax.plot(epoch, acc_2, linestyle='--', color='orange', label = 'B=10 E=5')
+ax.plot(epoch, acc_3, linestyle=':', color='orange', label = 'B=10 E=20')
+ax.plot(epoch, acc_4, linestyle='-', color='slateblue', label = 'B=50 E=1')
+ax.plot(epoch, acc_5, linestyle='--', color='slateblue', label = 'B=50 E=5')
+ax.plot(epoch, acc_6, linestyle=':', color='slateblue', label = 'B=50 E=10')
+ax.set_xlabel('Communication Rounds', fontsize=16)
+ax.set_ylabel('Test Accuracy', fontsize=16)
+ax.tick_params(axis='x', labelsize=14)
+ax.tick_params(axis='y', labelsize=14)
+plt.legend()
+plt.tight_layout()
+plt.savefig('FedAvg_iid.png', dpi=720)
+plt.show()
+
+
+acc_7 = pd.read_csv('test_accuacy_B_10_E_1_noniid.csv').to_numpy().tolist()
+acc_7.insert(0, [0])
+acc_8 = pd.read_csv('test_accuacy_B_10_E_5_noniid.csv').to_numpy().tolist()
+acc_8.insert(0, [0])
+acc_9 = pd.read_csv('test_accuacy_B_10_E_20_noniid.csv').to_numpy().tolist()
+acc_9.insert(0, [0])
+acc_10 = pd.read_csv('test_accuacy_B_50_E_1_noniid.csv').to_numpy().tolist()
+acc_10.insert(0, [0])
+acc_11 = pd.read_csv('test_accuacy_B_50_E_5_noniid.csv').to_numpy().tolist()
+acc_11.insert(0, [0])
+acc_12 = pd.read_csv('test_accuacy_B_50_E_20_noniid.csv').to_numpy().tolist()
+acc_12.insert(0, [0])
+
+
+fig, ax = plt.subplots()
+plt.plot(epoch, acc_7, linestyle='-', color='orange', label = 'B=10 E=1')
+plt.plot(epoch, acc_8, linestyle='--', color='orange', label = 'B=10 E=5')
+plt.plot(epoch, acc_9, linestyle=':', color='orange', label = 'B=10 E=20')
+plt.plot(epoch, acc_10, linestyle='-', color='slateblue', label = 'B=50 E=1')
+plt.plot(epoch, acc_11, linestyle='--', color='slateblue', label = 'B=50 E=5')
+plt.plot(epoch, acc_12, linestyle=':', color='slateblue', label = 'B=50 E=10')
+ax.set_xlabel('Communication Rounds', fontsize=16)
+ax.set_ylabel('Test Accuracy', fontsize=16)
+plt.legend()
+plt.tight_layout()
+plt.savefig('FedAvg_noniid.png', dpi=720)
+plt.show()
+
+brier_scores_iid = pd.read_csv('brier_scores_test.csv').to_numpy().tolist()
+brier_scores_np_iid = np.array(brier_scores_iid)
+
+brier_scores_noniid = pd.read_csv('brier_scores_test_niid.csv').to_numpy().tolist()
+brier_scores_np_noniid = np.array(brier_scores_noniid)
+
+brier_scores_de_6000 = pd.read_csv('brier_scores_de_6000.csv').to_numpy().tolist()
+brier_scores_np_de_6000 = np.array(brier_scores_de_6000)
+
+fig, ax = plt.subplots()
+plt.plot(range(len(brier_scores_iid)), brier_scores_np_iid, color='blue', label = 'FedAvg IID')
+plt.plot(range(len(brier_scores_noniid)), brier_scores_np_noniid, color='red', label = 'FedAvg NON-IID')
+plt.plot(range(len(brier_scores_de_6000)), brier_scores_np_de_6000, color='green', label = 'DE IID')
+
+ax.set_xlabel('Communication Rounds', fontsize=16)
+ax.set_ylabel('Brier Score', fontsize=16)
+plt.legend()
+plt.tight_layout()
+plt.savefig('Brier_score.png', dpi=720)
+plt.show()
