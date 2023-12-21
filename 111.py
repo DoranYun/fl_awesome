@@ -78,19 +78,20 @@ for iter in range(args.epochs):
 
     # testing
     net_glob.eval()
-    acc_train, loss_train1, brier_score_train = test_img(net_glob, dataset_train, args)
-    acc_test, loss_test, brier_score_test = test_img(net_glob, dataset_test, args)
+    acc_train, loss_train1, brier_score_train, prob_train = test_img(net_glob, dataset_train, args)
+    acc_test, loss_test, brier_score_test, prob_test = test_img(net_glob, dataset_test, args)
     print("Training accuracy: {:.2f}".format(acc_train))
     print("Testing accuracy: {:.2f}".format(acc_test))
     brier_scores.append(brier_score_test)
     test_accuacy.append(acc_test.item())
     # print(test_accuacy)
 
-print(brier_scores)
 #%%
 # plot loss curve
 # import matplotlib.pyplot as plt
 # brier_scores_np = np.array(brier_scores)
+print(prob_test)
+print(test_accuacy)
 
 # plt.figure()
 # plt.plot(range(len(brier_scores)), brier_scores_np)
@@ -98,7 +99,10 @@ print(brier_scores)
 # plt.show()
 # plt.savefig('./save/fed_Mnist_CNNMnist_{}_C{}_iid{}.png'.format(args.epochs, args.frac, args.iid))
 
-df = pd.DataFrame(brier_scores)
-df.to_csv('brier_scores_test_niid.csv'.format(brier_scores), index = False)
+df = pd.DataFrame(prob)
+df.to_csv('probability.csv'.format(prob), index = False)
+
+df = pd.DataFrame(test_accuacy)
+df.to_csv('test_accuacy.csv'.format(test_accuacy), index = False)
 # 将DataFrame保存为CSV文件
 # df.to_csv('test_accuacy_B_{}_E_{}_noniid.csv'.format(args.local_bs, args.local_ep), index=False)
