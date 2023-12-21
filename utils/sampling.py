@@ -1,5 +1,4 @@
 import numpy as np
-from torchvision import datasets, transforms
 
 def mnist_iid(dataset, num_users):
     """

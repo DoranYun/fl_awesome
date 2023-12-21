@@ -12,6 +12,8 @@ def args_parser():
     parser.add_argument('--lr', type=float, default=0.01, help="learning rate")
     parser.add_argument('--momentum', type=float, default=0.5, help="SGD momentum (default: 0.5)")
     parser.add_argument('--split', type=str, default='user', help="train-test split type, user or sample")
+    parser.add_argument('--algorithm', type=str, default='FedAvg', help='Federation learning algorithm, FedAvg or FedProx')
+    parser.add_argument('--mu', type=float, default=0.01, help='proximal term constant')
 
     # model arguments
     parser.add_argument('--kernel_num', type=int, default=9, help='number of each kind of kernel')

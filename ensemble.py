@@ -20,8 +20,8 @@ import pandas as pd
 args = args_parser()
 args.device = torch.device('cuda:{}'.format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
 trans_mnist = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
-dataset_train = datasets.MNIST('../data/mnist/', train=True, download=True, transform=trans_mnist)
-dataset_test = datasets.MNIST('../data/mnist/', train=False, download=True, transform=trans_mnist)
+dataset_train = datasets.MNIST('./data/mnist/', train=True, download=True, transform=trans_mnist)
+dataset_test = datasets.MNIST('./data/mnist/', train=False, download=True, transform=trans_mnist)
 
 dict_users = mnist_iid(dataset_train, args.num_users)
 
@@ -47,10 +47,8 @@ for idx in idxs_users:
     models.append(model)
 
 #testing
-def ensemble_predict(models, x):
-    # 确保模型处于评估模式
-    acc_train, loss_train1, brier_score_train = test_for_deep_ensemble(models, dataset_train, args)
-    acc_test, loss_test, brier_score_test = test_for_deep_ensemble(models, dataset_test, args)
+acc_train, loss_train1, brier_score_train = test_for_deep_ensemble(models, dataset_train, args)
+acc_test, loss_test, brier_score_test = test_for_deep_ensemble(models, dataset_test, args)
 
 # acc_train, loss_train1, brier_score_train = test_img(net_glob, dataset_train, args)
 # acc_test, loss_test, brier_score_test = test_img(net_glob, dataset_test, args)

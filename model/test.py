@@ -69,6 +69,8 @@ def test_for_deep_ensemble(models, datatest, args):
     for model in models:
         model.eval()
 
+    device = "cuda" if args.gpu != -1 and torch.cuda.is_available() else "cpu"
+
     test_loss = 0
     correct = 0
     data_loader = DataLoader(datatest, batch_size=args.bs)
@@ -76,7 +78,7 @@ def test_for_deep_ensemble(models, datatest, args):
 
     for data, target in data_loader:
         if args.gpu != -1:
-            data, target = data.cuda(), target.cuda()
+            data, target = data.to(device), target.to(device)
 
         ensemble_log_probs = []
         for model in models:
@@ -95,7 +97,7 @@ def test_for_deep_ensemble(models, datatest, args):
         # 注意：这里我们使用平均概率，而不是独立模型的输出
         for prob in avg_log_probs:
             one_hot_target = F.one_hot(target, num_classes=args.num_classes)
-            brier_scores.append(brier_score_loss(one_hot_target.cpu().numpy(), prob.cpu().detach().numpy()))
+            brier_scores.append(brier_score_loss(one_hot_target.cpu().detach().numpy(), prob.cpu().detach().numpy()))
 
     brier_score = sum(brier_scores) / len(brier_scores)
     test_loss /= len(data_loader.dataset)
