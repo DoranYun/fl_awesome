@@ -1,23 +1,18 @@
-# fl_awesome Project Plan
+# fl_awesome Project
 
 ## Hypothesis
 
-- Federated learning models are overall less accurate than centralized learning models
-- Differences in the amount of data across clients significantly affect model accuracy
+Impact of IID vs. Non-IID Data on Uncertainty Accuracy in Federated Learning
 
 ## Technology
 
 - Task: Imagine classification
-- Dataset: [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html)
+- Dataset: MNIST
 
-## Timeline
+## Get Started
 
-- Literature research
-    - Explore FL and Predictive Uncertainty Estimation papers
-    - Reproduce the algorithm from the papers
-- Implement the project
-    - Train models and record results
-- Analysis and reimplement
-- Write report
+Check and run `experiment.ipynb`
 
-123456456456
+## Result
+
+![result](res1.png)

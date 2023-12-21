@@ -27,6 +27,8 @@ class LocalUpdate(object):
         self.ldr_train = DataLoader(DatasetSplit(dataset, idxs), batch_size=self.args.local_bs, shuffle=True)
 
     def train(self, net):
+
+        net_glob_param = net.parameters()
         net.train()
         # train and update
         optimizer = torch.optim.SGD(net.parameters(), lr=self.args.lr, momentum=self.args.momentum)
@@ -39,12 +41,18 @@ class LocalUpdate(object):
                 net.zero_grad()
                 log_probs = net(images)
                 loss = self.loss_func(log_probs, labels)
-                loss.backward()
+
+                # FedProx loss term
+                fedprox_loss = 0.5 * self.args.mu * sum([(torch.norm(local_param - global_param) ** 2)
+                                                        for local_param, global_param in
+                                                        zip(net.parameters(), net_glob_param)])
+                total_loss = loss + fedprox_loss
+                total_loss.backward()
                 optimizer.step()
-                if self.args.verbose and batch_idx % 10 == 0:
-                    print('Update Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                        iter, batch_idx * len(images), len(self.ldr_train.dataset),
-                               100. * batch_idx / len(self.ldr_train), loss.item()))
+                #if self.args.verbose and batch_idx % 10 == 0:
+                    # print('Update Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                    #     iter, batch_idx * len(images), len(self.ldr_train.dataset),
+                    #         100. * batch_idx / len(self.ldr_train), loss.item()))
                 batch_loss.append(loss.item())
             epoch_loss.append(sum(batch_loss)/len(batch_loss))
-        return net.state_dict(), sum(epoch_loss) / len(epoch_loss)
+        return net.state_dict(), sum(epoch_loss) / len(epoch_loss), net
