@@ -15,4 +15,4 @@ Check and run `experiment.ipynb`
 
 ## Result
 
-![result](res1.png)
+![result](res.png)

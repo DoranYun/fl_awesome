@@ -27,7 +27,7 @@ class LocalUpdate(object):
         self.ldr_train = DataLoader(DatasetSplit(dataset, idxs), batch_size=self.args.local_bs, shuffle=True)
 
     def train(self, net):
-
+        
         net_glob_param = net.parameters()
         net.train()
         # train and update
